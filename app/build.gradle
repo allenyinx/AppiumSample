@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.android.appiumtest"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,13 +20,15 @@ android {
 }
 
 dependencies {
-    testCompile fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+//    implementation 'com.android.support:design:29'
+    testImplementation 'junit:junit:4.12'
     testCompile files('libs/cglib-nodep-3.2.4.jar')
     testCompile files('libs/commons-codec-1.10.jar')
     testCompile files('libs/commons-exec-1.3.jar')
@@ -58,4 +60,5 @@ dependencies {
     testCompile files('libs/websocket-api-9.2.15.v20160210.jar')
     testCompile files('libs/websocket-client-9.2.15.v20160210.jar')
     testCompile files('libs/websocket-common-9.2.15.v20160210.jar')
+
 }
