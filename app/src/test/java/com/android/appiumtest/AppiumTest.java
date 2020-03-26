@@ -21,7 +21,7 @@ public class AppiumTest {
     //Define AndroidDriver Object
     protected WebDriver driver;
 
-    String appPackageName = "com.android.appiumtest";
+    String appPackageName = "com.hellochat.HelloChat";
     String id = ":id/";
     // id of Widget like EditText username & Password
     By userId = By.id(appPackageName + id + "email");
@@ -41,8 +41,8 @@ public class AppiumTest {
     @Before
     public void setUp() throws MalformedURLException {
 
-        File appDir = new File("/Users/i306445/Documents/debug/");
-        File app = new File(appDir, "ApiDemos-debug.apk");
+        File appDir = new File("/Users/i306445/Documents/appium-source/");
+        File app = new File(appDir, "HelloChat-prod-v1.1.9.apk");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         //Appium Server Version Name check your version name of appium
@@ -51,11 +51,11 @@ public class AppiumTest {
         //Device Android Version
         capabilities.setCapability("platformVersion", "10.0");
         //Device name displayed on Android Monitor
-        capabilities.setCapability("deviceName", "emulator-5554");
+        capabilities.setCapability("deviceName", "Nexus5");
         // Package Name of Application
         capabilities.setCapability("appPackage", appPackageName);
         //Activity Name
-        capabilities.setCapability("appActivity", appPackageName + ".LoginActivity");
+        capabilities.setCapability("appActivity", appPackageName + ".MainActivity");
         //Appium Running Server URL path(including IP and PORT)
         capabilities.setCapability("app", app.getAbsolutePath());
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
