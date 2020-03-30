@@ -1,37 +1,33 @@
-package com.android.appiumtest;
+package com.android.appiumtest.hellochat;
+
+import com.android.appiumtest.locator.LoginLocator;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 
 
-public class AppiumTest {
+public class ChatBaseTest {
 
     //Define AndroidDriver Object
     protected WebDriver driver;
 
+    protected LoginLocator loginLocator;
+
     String appPackageName = "com.hellochat.HelloChat";
-    String id = ":id/";
-    // id of Widget like EditText username & Password
-    By userId = By.id(appPackageName + id + "email");
-
-    By password = By.id("com.android.appiumtest:id/password");
-//    By password = By.id(appPackageName + id + "password");
-    //id of Widget like Button
-    By login_Button = By.id("com.android.appiumtest:id/email_sign_in_button");
-//    By login_Button = By.id(appPackageName + id + "email_sign_in_button");
-
 
     /**
      * Setup DesiredCapabilities and Android Driver
@@ -41,8 +37,10 @@ public class AppiumTest {
     @Before
     public void setUp() throws MalformedURLException {
 
-        File appDir = new File("/Users/allenyin/Downloads/");
+        File appDir = new File(System.getenv("HOME"));
         File app = new File(appDir, "HelloChat-prod-v1.1.9.apk");
+
+        loginLocator = new LoginLocator();
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         //Appium Server Version Name check your version name of appium
@@ -52,8 +50,8 @@ public class AppiumTest {
         capabilities.setCapability("platformVersion", "10.0");
         //Device name displayed on Android Monitor
         capabilities.setCapability("deviceName", "emulator-5554");
-        capabilities.setCapability("remoteAdbHost", "host.docker.internal");
-        capabilities.setCapability("adbPort", "5037");
+//        capabilities.setCapability("remoteAdbHost", "host.docker.internal");
+//        capabilities.setCapability("adbPort", "5037");
         // Package Name of Application
         capabilities.setCapability("appPackage", appPackageName);
         //Activity Name
@@ -64,16 +62,25 @@ public class AppiumTest {
         driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
     }
 
-    @Test
-    public void loginTest() {
-        driver.findElement(userId).sendKeys("test@xyz.com");
-//        driver.navigate().back();
-        driver.findElement(password).sendKeys("test1234");
-//        driver.navigate().back();
-        driver.findElement(login_Button).click();
-        WebElement element = driver.findElement(By.id(appPackageName + id + "welcome_user"));
-        assert element.getText().equals("test@xyz.com") : "Actual value is " + element.getText() + " did not match with expected value test@xyz.com";
+    public  boolean waitForPresence(AndroidDriver driver, int timeLimitInSeconds, String targetResourceId){
 
+        boolean isElementPresent = false;
+        try{
+            MobileElement mobileElement =  (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().resourceId(\""+targetResourceId+"\")");
+            WebDriverWait wait = new WebDriverWait(driver, timeLimitInSeconds);
+            wait.until(ExpectedConditions.visibilityOf(mobileElement));
+            isElementPresent = mobileElement.isDisplayed();
+            return isElementPresent;
+        }catch(Exception e){
+            isElementPresent = false;
+            System.out.println(e.getMessage());
+            return isElementPresent;
+        } }
+
+
+    public void getElementSource(WebElement webElement) {
+
+        webElement.getAttribute("outerHTML");
     }
 
 
